@@ -1,0 +1,2579 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{pfee2019}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k}{import} \PY{n}{stats} \PY{k}{as} \PY{n}{st}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{ticker} \PY{k}{import} \PY{n}{PercentFormatter}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{import} \PY{n}{chi2\PYZus{}contingency}
+\PY{k+kn}{from} \PY{n+nn}{collections} \PY{k}{import} \PY{n}{Counter}
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k}{import} \PY{n}{sqrt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sofi}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Downloads}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{wetransfer\PYZhy{}3ab4ca}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{2019.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{;}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{encoding} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ISO\PYZhy{}8859\PYZhy{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                     \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+                     \PY{n}{dtype}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{object}\PY{p}{\PYZcb{}}\PY{p}{)}
+
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}IPython\textbackslash{}core\textbackslash{}interactiveshell.py:3058:
+DtypeWarning: Columns (19) have mixed types. Specify dtype option on import or
+set low\_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         ID\_ORDER                 DATE-ADD                 TIME-ADD  LOCATION  \textbackslash{}
+0       800155370  2019-01-01 00:00:00.000  2019-01-01 14:12:00.000         8
+1       800155372  2019-01-01 00:00:00.000  2019-01-01 16:20:03.000         8
+2       800155367  2019-01-01 00:00:00.000  2019-01-01 14:01:35.000         8
+3       800155369  2019-01-01 00:00:00.000  2019-01-01 14:07:08.000         8
+4       800155368  2019-01-01 00:00:00.000  2019-01-01 14:06:46.000         8
+{\ldots}           {\ldots}                      {\ldots}                      {\ldots}       {\ldots}
+471576  800165808  2019-12-31 00:00:00.000  2019-12-31 14:12:20.000         8
+471577   62241295  2019-12-31 00:00:00.000  2019-12-31 11:44:36.000        62
+471578   62241294  2019-12-31 00:00:00.000  2019-12-31 11:42:59.000        62
+471579  680067576  2019-12-31 00:00:00.000  2019-12-31 18:14:16.000        68
+471580  680067555  2019-12-31 00:00:00.000  2019-12-31 16:15:03.000        68
+
+       ID\_CUSTOMER          LAST\_NAME FIRST\_NAME  YX\_LIBELLE BIRTH\_YEAR  \textbackslash{}
+0         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+1         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+2         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+3         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+4         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+{\ldots}            {\ldots}                {\ldots}        {\ldots}         {\ldots}        {\ldots}
+471576    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471577    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471578    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471579    B0127330             MELYEN       Moez         NaN       1975
+471580   BC0680670          BOUSSETTA      Foued  PARTENAIRE       1900
+
+           TELEX  {\ldots}        CITY         ITEM\_CODE   CC\_LIBELLE CC\_LIBELLE\_1  \textbackslash{}
+0            NaN  {\ldots}       TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON
+1            NaN  {\ldots}       TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON
+2            NaN  {\ldots}       TUNIS     4BZSC745SC19H  BLUE ISLAND      BLOUSON
+3            NaN  {\ldots}       TUNIS  4PA00H111358C19H  BLUE ISLAND     PANTALON
+4            NaN  {\ldots}       TUNIS    4BZ0113311F19H  BLUE ISLAND      BLOUSON
+{\ldots}          {\ldots}  {\ldots}         {\ldots}               {\ldots}          {\ldots}          {\ldots}
+471576       NaN  {\ldots}       TUNIS  31MA00F01129F20A       STUDIO      MANTEAU
+471577       NaN  {\ldots}       TUNIS     4PUB013BBC20H  BLUE ISLAND         PULL
+471578       NaN  {\ldots}       TUNIS  6TN01F051620F20A  SASIO FEMME      TUNIQUE
+471579  58642647  {\ldots}    MONASTIR      4PUTN10TU20H  BLUE ISLAND         PULL
+471580  55942482  {\ldots}  MONASTIRÂ       4PUGH9GAT20H  BLUE ISLAND         PULL
+
+          DESIGNATION     PVTTC QTEFACT PUTTCNET MLR\_REMISE GTR\_LIBELLE
+0                BLEU   89.9000       1      NaN        NaN         NaN
+1                BLEU   89.9000       1      NaN        NaN         NaN
+2                BLEU  189.9000       1      NaN        NaN         NaN
+3                BRUN   89.9000       1      NaN        NaN         NaN
+4                NOIR  149.0000       1      NaN        NaN         NaN
+{\ldots}               {\ldots}       {\ldots}     {\ldots}      {\ldots}        {\ldots}         {\ldots}
+471576           NOIR  269.0000      -1   -161.4       40.0         NaN
+471577  NOIR/BORDEAUX  109.0000      -1      0.0      100.0         NaN
+471578      NOIR/ECRU  129.0000      -1      0.0      100.0         NaN
+471579        CARAMEL  109.0000      -1      0.0      100.0         NaN
+471580         MARINE   79.9000      -1      0.0      100.0         NaN
+
+[471581 rows x 23 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240233
+YX\_LIBELLE       91694
+BIRTH\_YEAR           1
+TELEX           243519
+EMAIL           364553
+ADRESS          319717
+POSTAL\_CODE      82826
+CITY             83458
+ITEM\_CODE            0
+CC\_LIBELLE         451
+CC\_LIBELLE\_1       451
+DESIGNATION        451
+PVTTC                0
+QTEFACT              0
+PUTTCNET         71059
+MLR\_REMISE       71088
+GTR\_LIBELLE      79835
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+98.9000          64007
+89.9000          59525
+79.9000          43944
+119.0000         38841
+69.9000          32756
+                 {\ldots}
+399.9000             1
+ROUX/VERT            1
+CAMEL/NOIR           1
+GRIS/NOIR            1
+MOUTARDE/NOIR        1
+Name: PVTTC, Length: 162, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{,} \PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         ID\_ORDER                 DATE-ADD                 TIME-ADD  LOCATION  \textbackslash{}
+428      54138740  2019-01-01 00:00:00.000  2019-01-01 14:29:25.000        54
+1191     54138740  2019-01-01 00:00:00.000  2019-01-01 14:29:25.000        54
+2176    270012956  2019-01-03 00:00:00.000  2019-01-03 11:23:26.000        27
+3270    270012961  2019-01-05 00:00:00.000  2019-01-05 16:54:48.000        27
+3274    270012960  2019-01-05 00:00:00.000  2019-01-05 16:54:26.000        27
+{\ldots}           {\ldots}                      {\ldots}                      {\ldots}       {\ldots}
+466234   15040998  2019-12-29 00:00:00.000  2019-12-29 16:48:46.000        15
+468536  680067510  2019-12-30 00:00:00.000  2019-12-30 13:30:18.000        68
+469426   16293861  2019-12-30 00:00:00.000  2019-12-30 17:58:19.000        16
+469554  270015175  2019-12-31 00:00:00.000  2019-12-31 17:02:45.000        27
+469559  270015176  2019-12-31 00:00:00.000  2019-12-31 19:52:31.000        27
+
+       ID\_CUSTOMER          LAST\_NAME       FIRST\_NAME  YX\_LIBELLE BIRTH\_YEAR  \textbackslash{}
+428      BC0640283              GZARA             Atef  PARTENAIRE       1979
+1191     BC0640283              GZARA             Atef  PARTENAIRE       1979
+2176      B1008529               BDAY            Ahmed         NaN       1982
+3270      SC000004  CLIENT de PASSAGE              NaN    PASSAGER          0
+3274     SB0270390            MAGROUN            Layla  PARTENAIRE       1900
+{\ldots}            {\ldots}                {\ldots}              {\ldots}         {\ldots}        {\ldots}
+466234   SB0272603             CHATTI             Sana  PARTENAIRE       1900
+468536    B1010767               AIDA         Jamoussi         NaN       1974
+469426   BC0622262          TRABELSSI           Khaled  PARTENAIRE       1977
+469554    S2009058          BEN ARBIA          Moufida         NaN       1976
+469559    S2009064             AWATEF  Saadaoui Chatti         NaN       1974
+
+           TELEX  {\ldots}        CITY ITEM\_CODE    CC\_LIBELLE CC\_LIBELLE\_1  \textbackslash{}
+428     98248859  {\ldots}        8052  NABEULÂ    4PU2BBBC19H  BLUE ISLAND
+1191    98248859  {\ldots}        8052  NABEULÂ   4PU10BBBC19H  BLUE ISLAND
+2176    50531275  {\ldots}      MSAKEN        VA           NaN          NaN
+3270         NaN  {\ldots}       TUNIS        VA           NaN          NaN
+3274    52550735  {\ldots}         NaN        VA           NaN          NaN
+{\ldots}          {\ldots}  {\ldots}         {\ldots}       {\ldots}           {\ldots}          {\ldots}
+466234  21761151  {\ldots}         NaN        VA           NaN          NaN
+468536  95366195  {\ldots}  MONASTIRÂ         VA           NaN          NaN
+469426  21824184  {\ldots}         NaN        VA           NaN          NaN
+469554  50699126  {\ldots}      MSAKEN        VA           NaN          NaN
+469559  24608275  {\ldots}      MSAKEN        VA           NaN          NaN
+
+       DESIGNATION PVTTC QTEFACT PUTTCNET  MLR\_REMISE GTR\_LIBELLE
+428           PULL   0.0    89.9      1.0         NaN         NaN
+1191          PULL   0.0    89.9      1.0         0.0    100.0000
+2176           NaN   0.0       1      NaN         NaN         NaN
+3270           NaN   0.0       1      NaN         NaN         NaN
+3274           NaN   0.0       1      NaN         NaN         NaN
+{\ldots}            {\ldots}   {\ldots}     {\ldots}      {\ldots}         {\ldots}         {\ldots}
+466234         NaN   0.0       1      NaN         NaN         NaN
+468536         NaN   0.0       1      NaN         NaN         NaN
+469426         NaN   0.0       1      NaN         NaN         NaN
+469554         NaN   0.0       1      NaN         NaN         NaN
+469559         NaN   0.0       1      NaN         NaN         NaN
+
+[623 rows x 23 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{PVTTC} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         ID\_ORDER                 DATE-ADD                 TIME-ADD  LOCATION  \textbackslash{}
+0       800155370  2019-01-01 00:00:00.000  2019-01-01 14:12:00.000         8
+1       800155372  2019-01-01 00:00:00.000  2019-01-01 16:20:03.000         8
+2       800155367  2019-01-01 00:00:00.000  2019-01-01 14:01:35.000         8
+3       800155369  2019-01-01 00:00:00.000  2019-01-01 14:07:08.000         8
+4       800155368  2019-01-01 00:00:00.000  2019-01-01 14:06:46.000         8
+{\ldots}           {\ldots}                      {\ldots}                      {\ldots}       {\ldots}
+471576  800165808  2019-12-31 00:00:00.000  2019-12-31 14:12:20.000         8
+471577   62241295  2019-12-31 00:00:00.000  2019-12-31 11:44:36.000        62
+471578   62241294  2019-12-31 00:00:00.000  2019-12-31 11:42:59.000        62
+471579  680067576  2019-12-31 00:00:00.000  2019-12-31 18:14:16.000        68
+471580  680067555  2019-12-31 00:00:00.000  2019-12-31 16:15:03.000        68
+
+       ID\_CUSTOMER          LAST\_NAME FIRST\_NAME  YX\_LIBELLE BIRTH\_YEAR  \textbackslash{}
+0         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+1         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+2         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+3         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+4         SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+{\ldots}            {\ldots}                {\ldots}        {\ldots}         {\ldots}        {\ldots}
+471576    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471577    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471578    SC000004  CLIENT de PASSAGE        NaN    PASSAGER          0
+471579    B0127330             MELYEN       Moez         NaN       1975
+471580   BC0680670          BOUSSETTA      Foued  PARTENAIRE       1900
+
+           TELEX  {\ldots}        CITY         ITEM\_CODE   CC\_LIBELLE CC\_LIBELLE\_1  \textbackslash{}
+0            NaN  {\ldots}       TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON
+1            NaN  {\ldots}       TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON
+2            NaN  {\ldots}       TUNIS     4BZSC745SC19H  BLUE ISLAND      BLOUSON
+3            NaN  {\ldots}       TUNIS  4PA00H111358C19H  BLUE ISLAND     PANTALON
+4            NaN  {\ldots}       TUNIS    4BZ0113311F19H  BLUE ISLAND      BLOUSON
+{\ldots}          {\ldots}  {\ldots}         {\ldots}               {\ldots}          {\ldots}          {\ldots}
+471576       NaN  {\ldots}       TUNIS  31MA00F01129F20A       STUDIO      MANTEAU
+471577       NaN  {\ldots}       TUNIS     4PUB013BBC20H  BLUE ISLAND         PULL
+471578       NaN  {\ldots}       TUNIS  6TN01F051620F20A  SASIO FEMME      TUNIQUE
+471579  58642647  {\ldots}    MONASTIR      4PUTN10TU20H  BLUE ISLAND         PULL
+471580  55942482  {\ldots}  MONASTIRÂ       4PUGH9GAT20H  BLUE ISLAND         PULL
+
+          DESIGNATION  PVTTC QTEFACT PUTTCNET  MLR\_REMISE GTR\_LIBELLE
+0                BLEU   89.9       1      NaN         NaN         NaN
+1                BLEU   89.9       1      NaN         NaN         NaN
+2                BLEU  189.9       1      NaN         NaN         NaN
+3                BRUN   89.9       1      NaN         NaN         NaN
+4                NOIR  149.0       1      NaN         NaN         NaN
+{\ldots}               {\ldots}    {\ldots}     {\ldots}      {\ldots}         {\ldots}         {\ldots}
+471576           NOIR  269.0      -1   -161.4        40.0         NaN
+471577  NOIR/BORDEAUX  109.0      -1      0.0       100.0         NaN
+471578      NOIR/ECRU  129.0      -1      0.0       100.0         NaN
+471579        CARAMEL  109.0      -1      0.0       100.0         NaN
+471580         MARINE   79.9      -1      0.0       100.0         NaN
+
+[470958 rows x 23 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 470958 entries, 0 to 471580
+Data columns (total 23 columns):
+ID\_ORDER        470958 non-null int32
+DATE-ADD        470958 non-null object
+TIME-ADD        470958 non-null object
+LOCATION        470958 non-null int32
+ID\_CUSTOMER     470958 non-null object
+LAST\_NAME       470958 non-null object
+FIRST\_NAME      230836 non-null object
+YX\_LIBELLE      379434 non-null object
+BIRTH\_YEAR      470958 non-null object
+TELEX           227558 non-null object
+EMAIL           106653 non-null object
+ADRESS          151459 non-null object
+POSTAL\_CODE     388236 non-null object
+CITY            387605 non-null object
+ITEM\_CODE       470958 non-null object
+CC\_LIBELLE      470830 non-null object
+CC\_LIBELLE\_1    470830 non-null object
+DESIGNATION     470830 non-null object
+PVTTC           470958 non-null float64
+QTEFACT         470958 non-null object
+PUTTCNET        400221 non-null float64
+MLR\_REMISE      400221 non-null float64
+GTR\_LIBELLE     391475 non-null object
+dtypes: float64(3), int32(2), object(18)
+memory usage: 82.6+ MB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0000\PYZhy{}00\PYZhy{}00}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{\PYZcb{}}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}frame.py:4263:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  method=method,
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240122
+YX\_LIBELLE       91524
+BIRTH\_YEAR           0
+TELEX           243400
+EMAIL           364305
+ADRESS          319499
+POSTAL\_CODE      82722
+CITY             83353
+ITEM\_CODE            0
+CC\_LIBELLE         128
+CC\_LIBELLE\_1       128
+DESIGNATION        128
+PVTTC                0
+QTEFACT              0
+PUTTCNET         70737
+MLR\_REMISE       70737
+GTR\_LIBELLE      79483
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}convert DataFrame column to date\PYZhy{}time:\PYZsq{}GP\PYZus{}DATEPIECE\PYZsq{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{Y\PYZhy{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{m\PYZhy{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:2:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:3:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  This is separate from the ipykernel package so we can avoid doing imports
+until
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:1:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """Entry point for launching an IPython kernel.
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create the dictionary for  ETABLISSEMENT}
+\PY{n}{etab} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+m+mi}{44}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Djerba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{28}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Geant}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{31}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Carrefour}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{62}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Central Park}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{16}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sousse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lafayette}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{130}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Palmarium}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Carrefour}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{24}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bizerte}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ennasr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{56}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Manzah VI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{14}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Zephyr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{61}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{La Soukra}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{63}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Menzah V}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{54}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nabeul}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{37}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Zephyr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{134}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Palmarium}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{64}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nabeul}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{65}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Manar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{36}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Manar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Djerba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{52}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Menzah VI}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{66}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mehdia}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{42}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lac 2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{67}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sfax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{68}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Monastir}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{51}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blue Island Menzah V}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{69}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{El Kef}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{35}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Kairouan}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Mseken}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{27}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Mseken}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{60}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sasio Djerba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{18}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Kelibia}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{41}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ksar Hellal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{74}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Hammamet}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{n}{etab}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}display the first 5 lines}
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:3:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  This is separate from the ipykernel package so we can avoid doing imports
+until
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         ID\_ORDER   DATE-ADD            TIME-ADD      LOCATION ID\_CUSTOMER  \textbackslash{}
+0       800155370 2019-01-01 2019-01-01 14:12:00     Lafayette    SC000004
+1       800155372 2019-01-01 2019-01-01 16:20:03     Lafayette    SC000004
+2       800155367 2019-01-01 2019-01-01 14:01:35     Lafayette    SC000004
+3       800155369 2019-01-01 2019-01-01 14:07:08     Lafayette    SC000004
+4       800155368 2019-01-01 2019-01-01 14:06:46     Lafayette    SC000004
+{\ldots}           {\ldots}        {\ldots}                 {\ldots}           {\ldots}         {\ldots}
+471576  800165808 2019-12-31 2019-12-31 14:12:20     Lafayette    SC000004
+471577   62241295 2019-12-31 2019-12-31 11:44:36  Central Park    SC000004
+471578   62241294 2019-12-31 2019-12-31 11:42:59  Central Park    SC000004
+471579  680067576 2019-12-31 2019-12-31 18:14:16      Monastir    B0127330
+471580  680067555 2019-12-31 2019-12-31 16:15:03      Monastir   BC0680670
+
+                LAST\_NAME FIRST\_NAME  YX\_LIBELLE BIRTH\_YEAR     TELEX  {\ldots}  \textbackslash{}
+0       CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+1       CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+2       CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+3       CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+4       CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+{\ldots}                   {\ldots}        {\ldots}         {\ldots}        {\ldots}       {\ldots}  {\ldots}
+471576  CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+471577  CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+471578  CLIENT de PASSAGE        NaN    PASSAGER          0       NaN  {\ldots}
+471579             MELYEN       Moez         NaN       1975  58642647  {\ldots}
+471580          BOUSSETTA      Foued  PARTENAIRE       1900  55942482  {\ldots}
+
+              CITY         ITEM\_CODE   CC\_LIBELLE CC\_LIBELLE\_1    DESIGNATION  \textbackslash{}
+0            TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON           BLEU
+1            TUNIS  4PA00H111364F19H  BLUE ISLAND     PANTALON           BLEU
+2            TUNIS     4BZSC745SC19H  BLUE ISLAND      BLOUSON           BLEU
+3            TUNIS  4PA00H111358C19H  BLUE ISLAND     PANTALON           BRUN
+4            TUNIS    4BZ0113311F19H  BLUE ISLAND      BLOUSON           NOIR
+{\ldots}            {\ldots}               {\ldots}          {\ldots}          {\ldots}            {\ldots}
+471576       TUNIS  31MA00F01129F20A       STUDIO      MANTEAU           NOIR
+471577       TUNIS     4PUB013BBC20H  BLUE ISLAND         PULL  NOIR/BORDEAUX
+471578       TUNIS  6TN01F051620F20A  SASIO FEMME      TUNIQUE      NOIR/ECRU
+471579    MONASTIR      4PUTN10TU20H  BLUE ISLAND         PULL        CARAMEL
+471580  MONASTIRÂ       4PUGH9GAT20H  BLUE ISLAND         PULL         MARINE
+
+        PVTTC QTEFACT PUTTCNET  MLR\_REMISE GTR\_LIBELLE
+0        89.9       1      NaN         NaN         NaN
+1        89.9       1      NaN         NaN         NaN
+2       189.9       1      NaN         NaN         NaN
+3        89.9       1      NaN         NaN         NaN
+4       149.0       1      NaN         NaN         NaN
+{\ldots}       {\ldots}     {\ldots}      {\ldots}         {\ldots}         {\ldots}
+471576  269.0      -1   -161.4        40.0         NaN
+471577  109.0      -1      0.0       100.0         NaN
+471578  129.0      -1      0.0       100.0         NaN
+471579  109.0      -1      0.0       100.0         NaN
+471580   79.9      -1      0.0       100.0         NaN
+
+[470958 rows x 23 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240122
+YX\_LIBELLE       91524
+BIRTH\_YEAR           0
+TELEX           243400
+EMAIL           364305
+ADRESS          319499
+POSTAL\_CODE      82722
+CITY             83353
+ITEM\_CODE            0
+CC\_LIBELLE         128
+CC\_LIBELLE\_1       128
+DESIGNATION        128
+PVTTC                0
+QTEFACT              0
+PUTTCNET         70737
+MLR\_REMISE       70737
+GTR\_LIBELLE      79483
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{3}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month} \PY{o}{==} \PY{l+m+mi}{3}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month} \PY{o}{==} \PY{l+m+mi}{6}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{21}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month} \PY{o}{==} \PY{l+m+mi}{9}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{23}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{l+m+mi}{3}\PY{o}{*}\PY{p}{(}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{month} \PY{o}{==} \PY{l+m+mi}{12}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{21}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:1:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """Entry point for launching an IPython kernel.
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:3:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  This is separate from the ipykernel package so we can avoid doing imports
+until
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:4:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  after removing the cwd from sys.path.
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:5:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:6:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:7:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  import sys
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{season}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Winter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Spring}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Summer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Autumn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{n}{season}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:3:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  This is separate from the ipykernel package so we can avoid doing imports
+until
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pre\PYZhy{}Covid}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:1:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row\_indexer,col\_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """Entry point for launching an IPython kernel.
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+SEASON               0
+COVID                0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240122
+YX\_LIBELLE       91524
+BIRTH\_YEAR           0
+TELEX           243400
+EMAIL           364305
+ADRESS          319499
+POSTAL\_CODE      82722
+CITY             83353
+ITEM\_CODE            0
+CC\_LIBELLE         128
+CC\_LIBELLE\_1       128
+DESIGNATION        128
+PVTTC                0
+QTEFACT              0
+PUTTCNET         70737
+MLR\_REMISE       70737
+GTR\_LIBELLE      79483
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0       258321
+1900     98962
+1980      7030
+1979      5105
+1976      4900
+         {\ldots}
+49           1
+10           1
+1075         1
+2            1
+1908         1
+Name: BIRTH\_YEAR, Length: 184, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+SEASON               0
+COVID                0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240122
+YX\_LIBELLE       91524
+BIRTH\_YEAR      261458
+TELEX           243400
+EMAIL           364305
+ADRESS          319499
+POSTAL\_CODE      82722
+CITY             83353
+ITEM\_CODE            0
+CC\_LIBELLE         128
+CC\_LIBELLE\_1       128
+DESIGNATION        128
+PVTTC                0
+QTEFACT              0
+PUTTCNET         70737
+MLR\_REMISE       70737
+GTR\_LIBELLE      79483
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1900-01-01    98962
+1980-01-01     7030
+1979-01-01     5105
+1976-01-01     4900
+1978-01-01     4777
+              {\ldots}
+1915-01-01        2
+2010-01-01        1
+1908-01-01        1
+1935-01-01        1
+1914-01-01        1
+Name: BIRTH\_YEAR, Length: 111, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{BIRTH\PYZus{}YEAR}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{BIRTH\PYZus{}YEAR}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year} \PY{o}{\PYZgt{}} \PY{l+m+mi}{2019}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nan}
+\PY{n}{df}\PY{o}{.}\PY{n}{BIRTH\PYZus{}YEAR}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{BIRTH\PYZus{}YEAR}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1919}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nan}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:1:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """Entry point for launching an IPython kernel.
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:2:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER             0
+DATE-ADD             0
+TIME-ADD             0
+SEASON               0
+COVID                0
+LOCATION             0
+ID\_CUSTOMER          0
+LAST\_NAME            0
+FIRST\_NAME      240122
+YX\_LIBELLE       91524
+BIRTH\_YEAR      360607
+TELEX           243400
+EMAIL           364305
+ADRESS          319499
+POSTAL\_CODE      82722
+CITY             83353
+ITEM\_CODE            0
+CC\_LIBELLE         128
+CC\_LIBELLE\_1       128
+DESIGNATION        128
+PVTTC                0
+QTEFACT              0
+PUTTCNET         70737
+MLR\_REMISE       70737
+GTR\_LIBELLE      79483
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year}\PY{o}{\PYZhy{}} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+39.0    7030
+40.0    5105
+43.0    4900
+41.0    4777
+37.0    4535
+        {\ldots}
+1.0        3
+8.0        3
+80.0       3
+84.0       1
+9.0        1
+Name: AGE, Length: 88, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100.0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{max\PYZus{}AGE}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\PY{n}{min\PYZus{}AGE}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cut\PYZus{}age}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Moins de 25 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{entre 25 et 30 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{entre 30 et 35 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{entre 35 et 40 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{entre 40 et 50 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Plus de 50 ans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{cut\PYZus{}bins} \PY{o}{=}\PY{p}{[}\PY{n}{min\PYZus{}AGE}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{35}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{max\PYZus{}AGE}\PY{p}{]}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE\PYZus{}SEGMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n}{cut\PYZus{}bins}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{cut\PYZus{}age}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE\PYZus{}SEGMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+entre 40 et 50 ans    38845
+entre 35 et 40 ans    25071
+Plus de 50 ans        17368
+entre 30 et 35 ans    15806
+entre 25 et 30 ans     8820
+Moins de 25 ans        4438
+Name: AGE\_SEGMENT, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CONFINEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NON}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CURFEW}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NON}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CONFINEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CURFEW}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{+}\PY{o}{=}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{+}\PY{o}{=}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{day}\PY{o}{\PYZgt{}}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{month}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Start\PYZus{}of\PYZus{}Month}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Middle\PYZus{}of\PYZus{}Month}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{End\PYZus{}of\PYZus{}Month}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{n}{month}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CONFINEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CURFEW}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{datetime} \PY{k}{import} \PY{n}{date}
+\PY{k+kn}{import} \PY{n+nn}{calendar}
+
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}WEEK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{strftime}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{week}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Monday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Start\PYZus{}of\PYZus{}Week}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Tuesday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Start\PYZus{}of\PYZus{}Week}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wednesday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mid\PYZus{}Week}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Thursday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mid\PYZus{}Week}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Friday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mid\PYZus{}Week}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Saturday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Week\PYZus{}End}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sunday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Week\PYZus{}end}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}WEEK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}WEEK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{n}{week}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}WEEK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CONFINEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CURFEW}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.0        426087
+1.0000      31845
+-1.0        12009
+-1.0000       886
+2.0            67
+3.0            10
+5.0            10
+4.0             9
+9.0             6
+0.0             5
+6.0             4
+-2.0            4
+11.0            2
+8.0             2
+7.0             2
+14.0            2
+2.0000          2
+10.0            2
+-3.0            1
+12.0            1
+18.0            1
+13.0            1
+Name: QTEFACT, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sum}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ 2.0     165677
+ 1.0      86429
+ 4.0      57935
+ 3.0      50575
+ 6.0      23978
+          {\ldots}
+ 70.0        22
+-8.0         20
+-7.0          9
+-5.0          7
+-6.0          6
+Name: TOTAL\_QUANTITY, Length: 63, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{max\PYZus{}QTE}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\PY{n}{min\PYZus{}QTE}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cut\PYZus{}qte} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1 pièce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{2 pièces}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Entre 3 et 5 Pièces}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Entre 6 et 10 Pièces}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Plus que 10 Pièces}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{cut\PYZus{}bins} \PY{o}{=}\PY{p}{[}\PY{l+m+mf}{0.9}\PY{p}{,}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{max\PYZus{}QTE} \PY{p}{]}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY\PYZus{}SEGMENTS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n}{cut\PYZus{}bins}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{cut\PYZus{}qte}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY\PYZus{}SEGMENTS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+2 pièces                165677
+Entre 3 et 5 Pièces     121465
+1 pièce                  86429
+Entre 6 et 10 Pièces     54254
+Plus que 10 Pièces       23068
+Name: TOTAL\_QUANTITY\_SEGMENTS, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df2}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sofi}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Downloads}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{train\PYZus{}code\PYZus{}postal.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df2} \PY{o}{=} \PY{n}{df2}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{code postal}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df2}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 969 entries, 0 to 968
+Data columns (total 5 columns):
+POST\_CODE       969 non-null object
+Delegation      969 non-null object
+poverty rate    969 non-null float64
+zone            969 non-null object
+orientation     969 non-null object
+dtypes: float64(1), object(4)
+memory usage: 38.0+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{hour}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{hour}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create the dictionary for Hour }
+
+\PY{n}{H} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{9}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{11}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}morning}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{12}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{13}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{14}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Early\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{16}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{17}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Late\PYZus{}afternoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{18}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Evening}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{19}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Evening}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{20}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Evening}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{21}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Night}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{22}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Night}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{23}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Night}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+\PY{c+c1}{\PYZsh{} Use the dictionary to map the \PYZsq{}Hour\PYZsq{}}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HOUR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{hour}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{n}{H}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}display the first 5 lines}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DATE\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TIME\PYZhy{}ADD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HOUR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SEASON}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}MONTH}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{P\PYZus{}WEEK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COVID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CONFINEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CURFEW}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOCATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}CUSTOMER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AGE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TELEX}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EMAIL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ADRESS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{new\PYZus{}row2070} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2070}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Delegation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LA MARSA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{poverty rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+m+mf}{2.2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{zone}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{urbaine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{orientation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nord\PYZhy{}est}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}
+\PY{n}{df2} \PY{o}{=} \PY{n}{df2}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{new\PYZus{}row2070}\PY{p}{,} \PY{n}{ignore\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POSTAL\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+\PY{n}{df2}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 970 entries, 0 to 969
+Data columns (total 5 columns):
+POST\_CODE       970 non-null object
+Delegation      970 non-null object
+poverty rate    970 non-null float64
+zone            970 non-null object
+orientation     970 non-null object
+dtypes: float64(1), object(4)
+memory usage: 38.0+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{DF10}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
+\PY{n}{DF10}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{codep}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{DF10}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+    codep
+0    2072
+1    1007
+2    2023
+3    1046
+4    1095
+..    {\ldots}
+965  4273
+966  4237
+967  4232
+968  4235
+969  2070
+
+[970 rows x 1 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{tunis}\PY{p}{(}\PY{n}{code}\PY{p}{,}\PY{n}{train}\PY{p}{)}\PY{p}{:}
+ \PY{k}{try}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Grand\PYZhy{}Tunis}\PY{l+s+s1}{\PYZsq{}}
+    \PY{k}{elif} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Grand\PYZhy{}Tunis}\PY{l+s+s1}{\PYZsq{}}
+    \PY{k}{elif} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Grand\PYZhy{}Tunis}\PY{l+s+s1}{\PYZsq{}}
+    \PY{k}{else} \PY{p}{:}
+        \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{orientation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+ \PY{k}{except} \PY{n+ne}{Exception} \PY{p}{:}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{DF10}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ORIENTATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{DF10}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{tunis}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{codep}\PY{p}{,}\PY{n}{df2}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}region}\PY{p}{(}\PY{n}{code}\PY{p}{,} \PY{n}{train}\PY{p}{)}\PY{p}{:}
+  \PY{k}{try}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{codep}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{codep}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ORIENTATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+  \PY{k}{except} \PY{n+ne}{Exception} \PY{p}{:}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}region}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{POSTAL\PYZus{}CODE}\PY{p}{,} \PY{n}{DF10}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+710
+710
+710
+710
+800
+24
+24
+24
+800
+0
+710
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}area}\PY{p}{(}\PY{n}{code}\PY{p}{,} \PY{n}{train}\PY{p}{)}\PY{p}{:}
+  \PY{k}{try}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{zone}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+  \PY{k}{except} \PY{n+ne}{Exception} \PY{p}{:}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{area}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}area}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{POSTAL\PYZus{}CODE}\PY{p}{,} \PY{n}{df2}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+710
+710
+710
+710
+800
+24
+24
+24
+800
+0
+710
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{region}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REGION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{area}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AREA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cut\PYZus{}class} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{E}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{cut\PYZus{}bins} \PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{18}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{,} \PY{l+m+mi}{42}\PY{p}{,} \PY{l+m+mi}{55}\PY{p}{]}
+\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{class}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{poverty rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n}{cut\PYZus{}bins}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{cut\PYZus{}class}\PY{p}{)}
+\PY{n}{df2}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+    POST\_CODE    Delegation  poverty rate     zone orientation class
+0        2072       SEJOUMI          11.5  urbaine    nord-est    C+
+1        1007       SEJOUMI          11.5  urbaine    nord-est    C+
+2        2023   JEBEL JLOUD           9.5  urbaine    nord-est    C+
+3        1046   JEBEL JLOUD           9.5  urbaine    nord-est    C+
+4        1095  SIDI HASSINE           9.4  urbaine    nord-est    C+
+..        {\ldots}           {\ldots}           {\ldots}      {\ldots}         {\ldots}   {\ldots}
+965      4273   KEBILI NORD          12.3  urbaine   sud-ouest    C+
+966      4237   KEBILI NORD          12.3  urbaine   sud-ouest    C+
+967      4232   KEBILI NORD          12.3  urbaine   sud-ouest    C+
+968      4235   KEBILI NORD          12.3  urbaine   sud-ouest    C+
+969      2070      LA MARSA           2.2  urbaine    nord-est     B
+
+[970 rows x 6 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{60}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}class22}\PY{p}{(}\PY{n}{code}\PY{p}{,} \PY{n}{train}\PY{p}{)}\PY{p}{:}
+  \PY{k}{try}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+      \PY{k}{return} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{POST\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{class}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+  \PY{k}{except} \PY{n+ne}{Exception} \PY{p}{:}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{code}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{61}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CLASS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}class22}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{POSTAL\PYZus{}CODE}\PY{p}{,} \PY{n}{df2}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+710
+710
+710
+710
+800
+24
+24
+24
+800
+0
+710
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER               0
+DATE-ADD               0
+TIME-ADD               0
+HOUR                   0
+SEASON                 0
+P\_MONTH                0
+P\_WEEK                 0
+COVID                  0
+CONFINEMENT            0
+CURFEW                 0
+LOCATION               0
+ID\_CUSTOMER            0
+LAST\_NAME              0
+FIRST\_NAME        240122
+YX\_LIBELLE         91524
+BIRTH\_YEAR        360607
+AGE               360607
+TELEX             243400
+EMAIL             364305
+ADRESS            319499
+POSTAL\_CODE            0
+CITY               83353
+ITEM\_CODE              0
+CC\_LIBELLE           128
+CC\_LIBELLE\_1         128
+DESIGNATION          128
+PVTTC                  0
+QTEFACT                0
+PUTTCNET           70737
+MLR\_REMISE         70737
+GTR\_LIBELLE        79483
+TOTAL\_QUANTITY         0
+REGION             85990
+AREA               85990
+CLASS              85990
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{63}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTH\PYZus{}YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BIRTHDAY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ITEM\PYZus{}CODE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}ID}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CC\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LABEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DESIGNATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COLOR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PVTTC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}PRICE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PUTTCNET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}PRICE\PYZus{}AFTER\PYZus{}REDUCTION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QTEFACT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MLR\PYZus{}REMISE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GTR\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}TYPE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YX\PYZus{}LIBELLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CUSTOMER\PYZus{}DESCRIPTION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{64}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sofi}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Downloads}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{train\PYZus{}gender.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{data}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1989 entries, 0 to 1988
+Data columns (total 5 columns):
+name        1989 non-null object
+gender 1    1989 non-null int64
+gender 2    1989 non-null int64
+score 1     1989 non-null float64
+score 2     1989 non-null float64
+dtypes: float64(2), int64(2), object(1)
+memory usage: 77.8+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{65}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{65}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ 20.0000    75827
+ 40.0000    71882
+ 30.0000    71102
+ 70.0000    68375
+ 50.0000    61662
+            {\ldots}
+-16.4659        1
+-10.5820        1
+ 11.1732        1
+ 50.6329        1
+ 30.3101        1
+Name: REDUCTION\_PERCENT, Length: 1285, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{66}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{67}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{67}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER                              0
+DATE-ADD                              0
+TIME-ADD                              0
+HOUR                                  0
+SEASON                                0
+P\_MONTH                               0
+P\_WEEK                                0
+COVID                                 0
+CONFINEMENT                           0
+CURFEW                                0
+LOCATION                              0
+ID\_CUSTOMER                           0
+LAST\_NAME                             0
+FIRST\_NAME                       240122
+CUSTOMER\_DESCRIPTION              91524
+BIRTHDAY                         360607
+AGE                              360607
+TELEX                            243400
+EMAIL                            364305
+ADRESS                           319499
+POSTAL\_CODE                           0
+CITY                              83353
+PRODUCT\_ID                            0
+LABEL                               128
+PRODUCT\_NAME                        128
+COLOR                               128
+PRODUCT\_PRICE                         0
+PRODUCT\_QUANTITY                      0
+PRODUCT\_PRICE\_AFTER\_REDUCTION     70737
+REDUCTION\_PERCENT                     0
+REDUCTION\_TYPE                    79483
+TOTAL\_QUANTITY                        0
+REGION                            85990
+AREA                              85990
+CLASS                             85990
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{68}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{max\PYZus{}red}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\PY{n}{min\PYZus{}red}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{69}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{min\PYZus{}red}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{69}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+-235.3468
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{70}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{max\PYZus{}red}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{70}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100.0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{71}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cut\PYZus{}qte} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Sans remise}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Inférieur à 30}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{de 30 à 40}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{de 40 à 50}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Plus que 50}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{p}{]}
+\PY{n}{cut\PYZus{}bins} \PY{o}{=}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.000000001}\PY{p}{,}\PY{l+m+mf}{0.000000001}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{,} \PY{n}{max\PYZus{}red} \PY{p}{]}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT\PYZus{}SEGMENTS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{REDUCTION\PYZus{}PERCENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n}{cut\PYZus{}bins}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{cut\PYZus{}qte}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{72}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{72}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER                              0
+DATE-ADD                              0
+TIME-ADD                              0
+HOUR                                  0
+SEASON                                0
+P\_MONTH                               0
+P\_WEEK                                0
+COVID                                 0
+CONFINEMENT                           0
+CURFEW                                0
+LOCATION                              0
+ID\_CUSTOMER                           0
+LAST\_NAME                             0
+FIRST\_NAME                       240122
+CUSTOMER\_DESCRIPTION              91524
+BIRTHDAY                         360607
+AGE                              360607
+TELEX                            243400
+EMAIL                            364305
+ADRESS                           319499
+POSTAL\_CODE                           0
+CITY                              83353
+PRODUCT\_ID                            0
+LABEL                               128
+PRODUCT\_NAME                        128
+COLOR                               128
+PRODUCT\_PRICE                         0
+PRODUCT\_QUANTITY                      0
+PRODUCT\_PRICE\_AFTER\_REDUCTION     70737
+REDUCTION\_PERCENT                     0
+REDUCTION\_TYPE                    79483
+TOTAL\_QUANTITY                        0
+REGION                            85990
+AREA                              85990
+CLASS                             85990
+REDUCTION\_PERCENT\_SEGMENTS          223
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{73}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}BASKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}PRICE\PYZus{}AFTER\PYZus{}REDUCTION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{*}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{74}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}BASKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}PRICE\PYZus{}AFTER\PYZus{}REDUCTION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}PRICE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{*}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}sofi\textbackslash{}Anacondaa\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}ipykernel\_launcher.py:1:
+SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-
+docs/stable/user\_guide/indexing.html\#returning-a-view-versus-a-copy
+  """Entry point for launching an IPython kernel.
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{75}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{75}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER                              0
+DATE-ADD                              0
+TIME-ADD                              0
+HOUR                                  0
+SEASON                                0
+P\_MONTH                               0
+P\_WEEK                                0
+COVID                                 0
+CONFINEMENT                           0
+CURFEW                                0
+LOCATION                              0
+ID\_CUSTOMER                           0
+LAST\_NAME                             0
+FIRST\_NAME                       240122
+CUSTOMER\_DESCRIPTION              91524
+BIRTHDAY                         360607
+AGE                              360607
+TELEX                            243400
+EMAIL                            364305
+ADRESS                           319499
+POSTAL\_CODE                           0
+CITY                              83353
+PRODUCT\_ID                            0
+LABEL                               128
+PRODUCT\_NAME                        128
+COLOR                               128
+PRODUCT\_PRICE                         0
+PRODUCT\_QUANTITY                      0
+PRODUCT\_PRICE\_AFTER\_REDUCTION     70737
+REDUCTION\_PERCENT                     0
+REDUCTION\_TYPE                    79483
+TOTAL\_QUANTITY                        0
+REGION                            85990
+AREA                              85990
+CLASS                             85990
+REDUCTION\_PERCENT\_SEGMENTS          223
+TOTAL\_BASKET                          0
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{76}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}TICKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}BASKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ID\PYZus{}ORDER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sum}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{77}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{77}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER                              0
+DATE-ADD                              0
+TIME-ADD                              0
+HOUR                                  0
+SEASON                                0
+P\_MONTH                               0
+P\_WEEK                                0
+COVID                                 0
+CONFINEMENT                           0
+CURFEW                                0
+LOCATION                              0
+ID\_CUSTOMER                           0
+LAST\_NAME                             0
+FIRST\_NAME                       240122
+CUSTOMER\_DESCRIPTION              91524
+BIRTHDAY                         360607
+AGE                              360607
+TELEX                            243400
+EMAIL                            364305
+ADRESS                           319499
+POSTAL\_CODE                           0
+CITY                              83353
+PRODUCT\_ID                            0
+LABEL                               128
+PRODUCT\_NAME                        128
+COLOR                               128
+PRODUCT\_PRICE                         0
+PRODUCT\_QUANTITY                      0
+PRODUCT\_PRICE\_AFTER\_REDUCTION     70737
+REDUCTION\_PERCENT                     0
+REDUCTION\_TYPE                    79483
+TOTAL\_QUANTITY                        0
+REGION                            85990
+AREA                              85990
+CLASS                             85990
+REDUCTION\_PERCENT\_SEGMENTS          223
+TOTAL\_BASKET                          0
+TOTAL\_TICKET                          0
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{78}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{max\PYZus{}v}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}TICKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\PY{n}{min\PYZus{}v}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}TICKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{79}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cut\PYZus{}ticket} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Inférieur à 100 DT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Entre 100 et 200 DT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Entre 200 et 300 DT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Supérieur à 300 DT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{cut\PYZus{}bins} \PY{o}{=}\PY{p}{[}\PY{n}{min\PYZus{}v}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{200}\PY{p}{,}\PY{l+m+mi}{300}\PY{p}{,}\PY{n}{max\PYZus{}v} \PY{p}{]}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TICKET\PYZus{}VALUE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TOTAL\PYZus{}TICKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n}{cut\PYZus{}bins}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{cut\PYZus{}ticket}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{80}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}g}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sofi}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Downloads}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{train\PYZus{}gender.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df\PYZus{}g}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1989 entries, 0 to 1988
+Data columns (total 5 columns):
+name        1989 non-null object
+gender 1    1989 non-null int64
+gender 2    1989 non-null int64
+score 1     1989 non-null float64
+score 2     1989 non-null float64
+dtypes: float64(2), int64(2), object(1)
+memory usage: 77.8+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{81}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{word2vec}\PY{p}{(}\PY{n}{word}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Count the number of characters in each word.}
+    \PY{n}{count\PYZus{}characters} \PY{o}{=} \PY{n}{Counter}\PY{p}{(}\PY{n}{word}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Gets the set of characters and calculates the \PYZdq{}length\PYZdq{} of the vector.}
+    \PY{n}{set\PYZus{}characters} \PY{o}{=} \PY{n+nb}{set}\PY{p}{(}\PY{n}{count\PYZus{}characters}\PY{p}{)}
+    \PY{n}{length} \PY{o}{=} \PY{n}{sqrt}\PY{p}{(}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{c}\PY{o}{*}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{count\PYZus{}characters}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{count\PYZus{}characters}\PY{p}{,} \PY{n}{set\PYZus{}characters}\PY{p}{,} \PY{n}{length}\PY{p}{,} \PY{n}{word}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{82}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{cosine\PYZus{}similarity}\PY{p}{(}\PY{n}{vector1}\PY{p}{,} \PY{n}{vector2}\PY{p}{,} \PY{n}{ndigits}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Get the common characters between the two character sets}
+    \PY{n}{common\PYZus{}characters} \PY{o}{=} \PY{n}{vector1}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{intersection}\PY{p}{(}\PY{n}{vector2}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Sum of the product of each intersection character.}
+    \PY{n}{product\PYZus{}summation} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{vector1}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{character}\PY{p}{]} \PY{o}{*} \PY{n}{vector2}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{character}\PY{p}{]} \PY{k}{for} \PY{n}{character} \PY{o+ow}{in} \PY{n}{common\PYZus{}characters}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Gets the length of each vector from the word2vec output.}
+    \PY{n}{length} \PY{o}{=} \PY{n}{vector1}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{n}{vector2}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} Calculates cosine similarity and rounds the value to ndigits decimal places.}
+    \PY{k}{if} \PY{n}{length} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Set value to 0 if word is empty.}
+        \PY{n}{similarity} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{similarity} \PY{o}{=} \PY{n+nb}{round}\PY{p}{(}\PY{n}{product\PYZus{}summation}\PY{o}{/}\PY{n}{length}\PY{p}{,} \PY{n}{ndigits}\PY{p}{)}
+    \PY{k}{return} \PY{n}{similarity}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{83}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vector\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{n}{word2vec}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{df\PYZus{}g}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{84}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{find\PYZus{}similar}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{,}\PY{n}{request\PYZus{}word}\PY{p}{,}\PY{n}{threshold}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Initiate an empty list to store results.}
+    \PY{n}{results\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} Two loops to compare each vector with another vector only once.}
+    \PY{n}{vector2}\PY{o}{=} \PY{n}{word2vec}\PY{p}{(}\PY{n+nb}{str}\PY{p}{(}\PY{n}{request\PYZus{}word}\PY{p}{)}\PY{p}{)}
+    \PY{n}{max\PYZus{}similarity} \PY{o}{=} \PY{l+m+mi}{0} 
+    \PY{n}{similar\PYZus{}word} \PY{o}{=} \PY{k+kc}{None}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{vector1} \PY{o}{=} \PY{n}{vector\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{} Calculate cosine similarity}
+        \PY{n}{similarity\PYZus{}score} \PY{o}{=} \PY{n}{cosine\PYZus{}similarity}\PY{p}{(}\PY{n}{vector1}\PY{p}{,} \PY{n}{vector2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} Append to results list if similarity score is between 1 and the threshold.}
+        \PY{c+c1}{\PYZsh{} Note that scores of 1 can be ignored here if we want to exclude people with the same name.}
+        \PY{k}{if} \PY{n}{similarity\PYZus{}score}\PY{o}{\PYZgt{}} \PY{n}{threshold} \PY{p}{:}
+            \PY{k}{if} \PY{l+m+mi}{1} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{similarity\PYZus{}score}\PY{o}{\PYZgt{}}\PY{o}{=}  \PY{n}{max\PYZus{}similarity}\PY{p}{:}
+                \PY{n}{max\PYZus{}similarity} \PY{o}{=} \PY{n}{similarity\PYZus{}score}
+                \PY{n}{similar\PYZus{}word} \PY{o}{=} \PY{n}{vector1}
+    \PY{k}{if} \PY{n}{max\PYZus{}similarity}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{p}{:}
+        \PY{k}{return} \PY{n}{similar\PYZus{}word}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{max\PYZus{}similarity}
+    \PY{k}{return} \PY{k+kc}{None}\PY{p}{,}\PY{l+m+mi}{0}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}generating genders from firstnames and lastnames}
+
+\PY{k}{def} \PY{n+nf}{get\PYZus{}gender}\PY{p}{(}\PY{n}{firstname}\PY{p}{,}\PY{n}{lastname}\PY{p}{,}\PY{n}{train}\PY{p}{)}\PY{p}{:}
+    \PY{n}{similar\PYZus{}firstname} \PY{p}{,} \PY{n}{similarity\PYZus{}score\PYZus{}firstname} \PY{o}{=} \PY{n}{find\PYZus{}similar}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{,}\PY{n}{firstname}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
+    \PY{n}{similar\PYZus{}lastname} \PY{p}{,} \PY{n}{similarity\PYZus{}score\PYZus{}lastname} \PY{o}{=} \PY{n}{find\PYZus{}similar}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{,}\PY{n}{lastname}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
+    \PY{k}{if} \PY{n}{lastname} \PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CLIENT de PASSAGE}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:}
+        \PY{k}{return} \PY{k+kc}{None}
+    \PY{k}{elif} \PY{n}{similarity\PYZus{}score\PYZus{}firstname} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{p}{:}
+        
+        \PY{n}{gender\PYZus{}firstname}\PY{o}{=}\PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{similar\PYZus{}firstname}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gender 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{k}{if} \PY{n}{similarity\PYZus{}score\PYZus{}lastname}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{p}{:}
+            
+            \PY{n}{gender\PYZus{}lastname}\PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{similar\PYZus{}lastname}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gender 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+            \PY{k}{if} \PY{n}{gender\PYZus{}firstname}\PY{o}{!=}\PY{n}{gender\PYZus{}lastname} \PY{p}{:} 
+                \PY{k}{if} \PY{n}{similarity\PYZus{}score\PYZus{}firstname}\PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{similarity\PYZus{}score\PYZus{}lastname} \PY{p}{:}
+                    \PY{k}{return} \PY{n}{gender\PYZus{}firstname}
+                \PY{k}{else} \PY{p}{:}
+                    \PY{k}{return} \PY{n}{gender\PYZus{}lastname}
+            \PY{k}{else}\PY{p}{:}
+                \PY{k}{return} \PY{n}{gender\PYZus{}firstname}
+    \PY{k}{elif} \PY{n}{similarity\PYZus{}score\PYZus{}lastname}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{gender\PYZus{}lastname}\PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{train}\PY{p}{[}\PY{n}{train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==} \PY{n+nb}{str}\PY{p}{(}\PY{n}{similar\PYZus{}lastname}\PY{p}{)}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gender 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{k}{return} \PY{n}{gender\PYZus{}lastname}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{86}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}defining the scores of each name}
+\PY{k}{def} \PY{n+nf}{get\PYZus{}score}\PY{p}{(}\PY{n}{firstname}\PY{p}{,}\PY{n}{lastname}\PY{p}{,} \PY{n}{train}\PY{p}{)}\PY{p}{:}
+  \PY{k}{try}\PY{p}{:}
+    \PY{n}{similar\PYZus{}firstname} \PY{p}{,} \PY{n}{similarity\PYZus{}score\PYZus{}firstname} \PY{o}{=} \PY{n}{find\PYZus{}similar}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{,}\PY{n}{firstname}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
+    \PY{n}{similar\PYZus{}lastname} \PY{p}{,} \PY{n}{similarity\PYZus{}score\PYZus{}lastname} \PY{o}{=} \PY{n}{find\PYZus{}similar}\PY{p}{(}\PY{n}{vector\PYZus{}list}\PY{p}{,}\PY{n}{lastname}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
+    \PY{k}{if} \PY{n}{lastname} \PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CLIENT de PASSAGE}\PY{l+s+s1}{\PYZsq{}} \PY{p}{:}
+        \PY{k}{return} \PY{l+m+mi}{0}
+    \PY{k}{if} \PY{n}{similarity\PYZus{}score\PYZus{}firstname} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{p}{:}
+      \PY{k}{if} \PY{n}{similarity\PYZus{}score\PYZus{}lastname}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{p}{:}
+        \PY{k}{return} \PY{n+nb}{max}\PY{p}{(}\PY{n}{similarity\PYZus{}score\PYZus{}firstname}\PY{p}{,}\PY{n}{similarity\PYZus{}score\PYZus{}lastname}\PY{p}{)}
+    \PY{k}{elif} \PY{n}{similarity\PYZus{}score\PYZus{}lastname}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{:}
+      \PY{k}{return} \PY{n}{similarity\PYZus{}score\PYZus{}lastname}
+    \PY{k}{else} \PY{p}{:}
+      \PY{k}{return} \PY{l+m+mf}{0.5}
+  \PY{k}{except} \PY{n+ne}{Exception} \PY{k}{as} \PY{n}{e} \PY{p}{:}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n}{e}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{87}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{FIRST\PYZus{}NAME}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{FIRST\PYZus{}NAME}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LAST\PYZus{}NAME}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LAST\PYZus{}NAME}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{88}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FIRST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{firstname}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LAST\PYZus{}NAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lastname}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{89}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}gender}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{firstname}\PY{p}{,} \PY{n}{x}\PY{o}{.}\PY{n}{lastname}\PY{p}{,}\PY{n}{df\PYZus{}g}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{n}{df}\PY{o}{.}\PY{n}{apply}\PY{p}{(} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{get\PYZus{}score}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{firstname}\PY{p}{,} \PY{n}{x}\PY{o}{.}\PY{n}{lastname}\PY{p}{,}\PY{n}{df\PYZus{}g}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ID\_ORDER                              0
+DATE-ADD                              0
+TIME-ADD                              0
+HOUR                                  0
+SEASON                                0
+P\_MONTH                               0
+P\_WEEK                                0
+COVID                                 0
+CONFINEMENT                           0
+CURFEW                                0
+LOCATION                              0
+ID\_CUSTOMER                           0
+lastname                              0
+firstname                             0
+CUSTOMER\_DESCRIPTION              91524
+BIRTHDAY                         360607
+AGE                              360607
+TELEX                            243400
+EMAIL                            364305
+ADRESS                           319499
+POSTAL\_CODE                           0
+CITY                              83353
+PRODUCT\_ID                            0
+LABEL                               128
+PRODUCT\_NAME                        128
+COLOR                               128
+PRODUCT\_PRICE                         0
+PRODUCT\_QUANTITY                      0
+PRODUCT\_PRICE\_AFTER\_REDUCTION     70737
+REDUCTION\_PERCENT                     0
+REDUCTION\_TYPE                    79483
+TOTAL\_QUANTITY                        0
+REGION                            85990
+AREA                              85990
+CLASS                             85990
+REDUCTION\_PERCENT\_SEGMENTS          223
+TOTAL\_BASKET                          0
+TOTAL\_TICKET                          0
+TICKET\_VALUE                          6
+gender                           240429
+score                                21
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{91}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{91}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0    136486
+1     94043
+Name: gender, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{92}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{92}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ 1.0     457932
+-1.0      12895
+ 2.0         69
+ 3.0         10
+ 5.0         10
+ 4.0          9
+ 9.0          6
+ 0.0          5
+ 6.0          4
+-2.0          4
+ 7.0          2
+ 14.0         2
+ 8.0          2
+ 10.0         2
+ 11.0         2
+-3.0          1
+ 12.0         1
+ 18.0         1
+ 13.0         1
+Name: PRODUCT\_QUANTITY, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{93}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{PRODUCT\PYZus{}QUANTITY}\PY{o}{!=}\PY{l+m+mf}{0.0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{94}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRODUCT\PYZus{}QUANTITY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{94}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+ 1.0     457932
+-1.0      12895
+ 2.0         69
+ 3.0         10
+ 5.0         10
+ 4.0          9
+ 9.0          6
+ 6.0          4
+-2.0          4
+ 7.0          2
+ 8.0          2
+ 10.0         2
+ 14.0         2
+ 11.0         2
+-3.0          1
+ 13.0         1
+ 18.0         1
+ 12.0         1
+Name: PRODUCT\_QUANTITY, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{95}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{95}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         ID\_ORDER   DATE-ADD            TIME-ADD             HOUR  SEASON  \textbackslash{}
+0       800155370 2019-01-01 2019-01-01 14:12:00  Early\_afternoon  Winter
+1       800155372 2019-01-01 2019-01-01 16:20:03   Late\_afternoon  Winter
+2       800155367 2019-01-01 2019-01-01 14:01:35  Early\_afternoon  Winter
+3       800155369 2019-01-01 2019-01-01 14:07:08  Early\_afternoon  Winter
+4       800155368 2019-01-01 2019-01-01 14:06:46  Early\_afternoon  Winter
+{\ldots}           {\ldots}        {\ldots}                 {\ldots}              {\ldots}     {\ldots}
+471576  800165808 2019-12-31 2019-12-31 14:12:20  Early\_afternoon  Winter
+471577   62241295 2019-12-31 2019-12-31 11:44:36     Late\_morning  Winter
+471578   62241294 2019-12-31 2019-12-31 11:42:59     Late\_morning  Winter
+471579  680067576 2019-12-31 2019-12-31 18:14:16          Evening  Winter
+471580  680067555 2019-12-31 2019-12-31 16:15:03   Late\_afternoon  Winter
+
+               P\_MONTH         P\_WEEK      COVID CONFINEMENT CURFEW  {\ldots}  \textbackslash{}
+0       Start\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+1       Start\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+2       Start\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+3       Start\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+4       Start\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+{\ldots}                {\ldots}            {\ldots}        {\ldots}         {\ldots}    {\ldots}  {\ldots}
+471576    End\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+471577    End\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+471578    End\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+471579    End\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+471580    End\_of\_Month  Start\_of\_Week  Pre-Covid         NON    NON  {\ldots}
+
+       TOTAL\_QUANTITY       REGION     AREA CLASS REDUCTION\_PERCENT\_SEGMENTS  \textbackslash{}
+0                 2.0  Grand-Tunis  urbaine     B                Sans remise
+1                 2.0  Grand-Tunis  urbaine     B                Sans remise
+2                 2.0  Grand-Tunis  urbaine     B                Sans remise
+3                 2.0  Grand-Tunis  urbaine     B                Sans remise
+4                 2.0  Grand-Tunis  urbaine     B                Sans remise
+{\ldots}               {\ldots}          {\ldots}      {\ldots}   {\ldots}                        {\ldots}
+471576            0.0  Grand-Tunis  urbaine     B                de 30 à 40\%
+471577            0.0  Grand-Tunis  urbaine     B               Plus que 50\%
+471578            0.0  Grand-Tunis  urbaine     B               Plus que 50\%
+471579            0.0   centre-est  urbaine     B               Plus que 50\%
+471580            0.0   centre-est  urbaine     B               Plus que 50\%
+
+       TOTAL\_BASKET  TOTAL\_TICKET         TICKET\_VALUE gender score
+0              89.9          89.9   Inférieur à 100 DT   None   0.0
+1              89.9          89.9   Inférieur à 100 DT   None   0.0
+2             189.9         189.9  Entre 100 et 200 DT   None   0.0
+3              89.9          89.9   Inférieur à 100 DT   None   0.0
+4             149.0         149.0  Entre 100 et 200 DT   None   0.0
+{\ldots}             {\ldots}           {\ldots}                  {\ldots}    {\ldots}   {\ldots}
+471576        161.4         486.8   Supérieur à 300 DT   None   0.0
+471577         -0.0           0.0   Inférieur à 100 DT   None   0.0
+471578         -0.0           0.0   Inférieur à 100 DT   None   0.0
+471579         -0.0           0.0   Inférieur à 100 DT      1   1.0
+471580         -0.0           0.0   Inférieur à 100 DT      1   1.0
+
+[470953 rows x 41 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{96}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{femme}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{97}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{homme}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{98}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}excel}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Users}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sofi}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{2019.xlsx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index} \PY{o}{=} \PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
